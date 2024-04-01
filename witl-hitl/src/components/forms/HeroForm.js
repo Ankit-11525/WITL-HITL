@@ -1,36 +1,40 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect,useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
-
-export default function HeroForm() {
+export default function HeroForm({ user }) {
   const [username, setUsername] = useState("");
+  console.log(user);
+  const router=useRouter();
 
-    useEffect(()=>{
-        if('localStorage' in window 
-            && window.localStorage.getItem('desiredUsername')
-        ){
-            console.log("render useEffect");
-            const newusername=window.localStorage.getItem('desiredUsername');
-            //console.log(username);
-             window.localStorage.removeItem('desiredUsername');
-            redirect('/account?username=' + newusername);
-
-        }
-    },[]);
+  useEffect(() => {
+    if (
+      "localStorage" in window &&
+      window.localStorage.getItem("desiredUsername")
+    ) {
+      console.log("render useEffect");
+      const newusername = window.localStorage.getItem("desiredUsername");
+      //console.log(username);
+      window.localStorage.removeItem("desiredUsername");
+      redirect("/account?username=" + newusername);
+    }
+  }, []);
 
   console.log("render");
   async function HandleSubmit(ev) {
     ev.preventDefault();
-    // console.log(username);
-    if(username.length>0){
-        window.localStorage.setItem('desiredUsername',username);
-        await signIn('google');
+    if (username.length > 0) {
+      if (user) {
+        console.log(user);
+        router.push('/account?desiredUsername=' + username);
+      } else {
+        window.localStorage.setItem("desiredUsername", username);
+        await signIn("google");
+      }
     }
-   
   }
 
   return (
@@ -41,11 +45,12 @@ export default function HeroForm() {
       >
         <span className="py-4 bg-white pl-4">witl-hitl.to/</span>
 
-        <input 
-            value={username}
-            onChange={(e)=>setUsername(e.target.value)}
-            type="text" className="py-4" 
-            placeholder="username" 
+        <input
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          type="text"
+          className="py-4"
+          placeholder="username"
         />
 
         <button type="submit" className="bg-blue-500 py-4 px-6 text-white">
