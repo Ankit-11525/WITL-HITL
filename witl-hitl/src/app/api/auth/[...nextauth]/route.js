@@ -3,7 +3,10 @@ import clientPromise from '@/libs/mongoClient'
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import GitHubProvider from "next-auth/providers/github";
+
+
 export const authOptions={
+  secret:process.env.SECRET,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
       GoogleProvider({

@@ -7,7 +7,7 @@ export default async function Header() {
   return (
     <header className="bg-white border-b py-6 ">
       <div className="max-w-4xl mx-auto flex justify-between px-6 ">
-        <div className="flex  flex-row  gap-6  ">
+        <div className="flex  flex-row  gap-6 items-center  ">
           <Link href={"/"}>WITL-HITL</Link>
           <nav className=" flex items-center gap-4 text-slate-500 text-sm">
             <Link href={"/about"}>About</Link>

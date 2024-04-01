@@ -8,9 +8,9 @@ const LoginWithGoogle = () => {
     <div>
       <button
         onClick={() => signIn('google')}
-        className="bg-white shadow text-center w-full py-4 flex justify-center gap-2 "
+        className="bg-white shadow text-center w-full py-4 flex justify-center gap-2 mb-3 "
       >
-        <FontAwesomeIcon icon={faGoogle} className="w-6 " />
+        <FontAwesomeIcon icon={faGoogle} className="w-6 text-center " />
         <span>Sign In with Google</span>
       </button>
     </div>
