@@ -4,7 +4,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import HeroForm from "@/components/forms/HeroForm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function Home() {
   const session= await getServerSession(authOptions);
   return (

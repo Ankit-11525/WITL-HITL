@@ -16,7 +16,7 @@ export default function UsernameForm({ desiredusername }) {
     setIsLoading(false);
     setTaken(result === false);
     if (result) {
-      redirect("/account/" + formData.get("username"));
+      redirect('/account?created='+formData.get('username'));
     }
   }
 
