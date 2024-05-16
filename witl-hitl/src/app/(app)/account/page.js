@@ -21,7 +21,7 @@ export default async  function Account({searchParams}){
     {
         return (
             <div>
-                this is url for {page.uri}
+                Your page is: /{page.uri}
             </div>
         )
     }
