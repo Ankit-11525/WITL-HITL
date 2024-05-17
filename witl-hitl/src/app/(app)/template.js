@@ -21,20 +21,20 @@ export default async function AppLayout({ children }) {
   return (
     <html lang="en">
       <body className={lato.className}>
-        <main className="flex min-h-screen">
-          <aside className=" w-48 p-8 bg-white shadow">
+        <main className="flex min-h-screen ">
+          <aside className=" w-48 p-4 pt-6 bg-white shadow">
             aside stuffs
             <div className="rounded-full overflow-hidden mx-auto">
               <Image
                 src={(await session)?.user?.image}
                 alt={"avatar"}
-                width={126}
-                height={128}
+                width={256}
+                height={256}
               />
             </div>
             <AppSideBar/>
           </aside>
-          <div className="">
+          <div className="w-full">
             <div className="bg-white m-4 p-4 shadow">{children}</div>
           </div>
         </main>

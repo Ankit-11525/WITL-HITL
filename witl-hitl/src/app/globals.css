@@ -6,5 +6,18 @@
 body{
     @apply bg-gray-100;
 }
+.radiotoggler{
+    @apply p-1 bg-gray-200 inline-flex;
+}
+.radiotoggler div{
+    @apply  p-2 px-4 text-gray-700 flex items-center gap-2; 
+}
+
+.radiotoggler input{
+    @apply  hidden 
+}
+.radiotoggler input:checked+div{
+    @apply  bg-white text-blue-600
+}
 
 
