@@ -18,7 +18,7 @@ export default async function Account({ searchParams }) {
   if (page) {
     return (
       <div >
-        <PageSettingsForm page={page} imageuri={session?.user?.image}/>
+        <PageSettingsForm page={page} user={session?.user}/>
       </div>
     );
   }
