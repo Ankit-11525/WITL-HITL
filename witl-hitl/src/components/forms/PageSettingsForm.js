@@ -1,18 +1,24 @@
 "use client";
+import { useState } from "react";
 import { faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
 import RadioToggelers from "../formitems/RadioToggelers";
 import Image from "next/image";
 
 import SubmitButton from "../buttons/SubmitButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import savePageSettings from "@/actions/savePageSettings";
+import { savePageSettings } from "@/actions/pageAction";
 import toast from "react-hot-toast";
 export default function PageSettingsForm({ page, user }) {
+  const [bgType, setBgType] = useState(page.bgType);
+  const [bgColor, setBgColor] = useState(page.bgColor);
   const saveBaseSettings = async (formData) => {
     const res = await savePageSettings(formData);
     if (res) {
       toast.success("Saved!");
+      console.log("Ankit");
+    console.log(bgColor);
     }
+    
     // const promise= new Promise( async (resolve,reject) =>{
     //   const res=await savePageSettings(formData);
     //   if(res) resolve();
@@ -28,14 +34,36 @@ export default function PageSettingsForm({ page, user }) {
     <div>
       <div className="-m-4 ">
         <form action={saveBaseSettings}>
-          <div className=" bg-gray-300 py-4 min-h-[200px] flex justify-center items-center bg-cover bg-center ">
-            <RadioToggelers
-              options={[
-                { value: "color", icon: faPalette, label: "Color" },
-                { value: "image", icon: faImage, label: "Image" },
-              ]}
-              onChange={() => {}}
-            />
+          <div
+            className=" py-4 min-h-[200px] flex justify-center items-center bg-cover bg-center "
+            style={{
+              backgroundColor: bgColor
+            }}
+          >
+            <div>
+              <RadioToggelers
+                options={[
+                  { value: "color", icon: faPalette, label: "Color" },
+                  { value: "image", icon: faImage, label: "Image" },
+                ]}
+                defaultValue={page.bgType}
+                onChange={val => setBgType(val)}
+              />
+
+              {bgType === "color" && (
+                <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
+                  <div className="flex gap-2 justify-center">
+                    <span>Background color:</span>
+                    <input
+                      type="color"
+                      name="bgColor"
+                      onChange={(ev) => setBgColor(ev.target.value)}
+                      defaultValue={bgColor}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <div className="flex justify-center -mb-8">

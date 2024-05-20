@@ -2,11 +2,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import UsernameForm from "@/components/forms/UsernameForm";
-import { Page } from "@/models/page";
+import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
 
-export default async function Account({ searchParams }) {
+export default async function AccountPage({ searchParams }) {
   const session = await getServerSession(authOptions);
   const desiredusername = searchParams.username;
   if (!session) {
