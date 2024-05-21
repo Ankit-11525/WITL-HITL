@@ -4,7 +4,7 @@ import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 
-export async function savePageSettings(formData) {
+export async function savePageSettings(formData,bgColor) {
   mongoose.connect(process.env.MONGO_URI);
   const session = await getServerSession(authOptions);
 
@@ -17,7 +17,7 @@ export async function savePageSettings(formData) {
         dataToUpdate[key] = formData.get(key);
       }
     }
-    console.log("dataToUpdate : " + dataToUpdate );
+    dataToUpdate["bgColor"] = bgColor;
 
     await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
 

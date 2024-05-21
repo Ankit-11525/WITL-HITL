@@ -1,24 +1,27 @@
 "use client";
 import { useState } from "react";
 import { faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
-import RadioToggelers from "../formitems/RadioToggelers";
+import RadioToggelers from "../formItems/RadioToggelers";
 import Image from "next/image";
 
 import SubmitButton from "../buttons/SubmitButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { savePageSettings } from "@/actions/pageAction";
+import { savePageSettings } from "@/actions/pageActions";
 import toast from "react-hot-toast";
+import { SketchPicker } from "react-color";
+import ColorPicker from "../formItems/ColorPicker";
+
 export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
+  const [bgImage, setBgImage] = useState(page.bgColor);
+
   const saveBaseSettings = async (formData) => {
-    const res = await savePageSettings(formData);
+    const res = await savePageSettings(formData,bgColor);
     if (res) {
       toast.success("Saved!");
-      console.log("Ankit");
-    console.log(bgColor);
     }
-    
+
     // const promise= new Promise( async (resolve,reject) =>{
     //   const res=await savePageSettings(formData);
     //   if(res) resolve();
@@ -36,9 +39,11 @@ export default function PageSettingsForm({ page, user }) {
         <form action={saveBaseSettings}>
           <div
             className=" py-4 min-h-[200px] flex justify-center items-center bg-cover bg-center "
-            style={{
-              backgroundColor: bgColor
-            }}
+            style={
+              bgType === "color"
+                ? { backgroundColor: bgColor }
+                : { backgroundImage: bgImage }
+            }
           >
             <div>
               <RadioToggelers
@@ -47,19 +52,19 @@ export default function PageSettingsForm({ page, user }) {
                   { value: "image", icon: faImage, label: "Image" },
                 ]}
                 defaultValue={page.bgType}
-                onChange={val => setBgType(val)}
+                onChange={(val) => setBgType(val)}
               />
 
               {bgType === "color" && (
                 <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
                   <div className="flex gap-2 justify-center">
                     <span>Background color:</span>
-                    <input
+                    <ColorPicker type="color" name={bgColor} bgColor={bgColor} setBgColor={setBgColor}/>
+                    {/* <input
                       type="color"
                       name="bgColor"
-                      onChange={(ev) => setBgColor(ev.target.value)}
-                      defaultValue={bgColor}
-                    />
+                      onChange={ev => setBgColor(ev.target.value)}
+                      defaultValue={page.bgColor} /> */}
                   </div>
                 </div>
               )}
