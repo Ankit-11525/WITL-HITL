@@ -1,6 +1,13 @@
 "use client";
 import { useState } from "react";
-import { faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCloudArrowUp,
+  faImage,
+  faPalette,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 import RadioToggelers from "../formItems/RadioToggelers";
 import Image from "next/image";
 import SubmitButton from "../buttons/SubmitButton";
@@ -8,39 +15,56 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { savePageSettings } from "@/actions/pageActions";
 import toast from "react-hot-toast";
 import ColorPicker from "../formItems/ColorPicker";
+import {handleImageUpload} from '../../libs/uploadImage'
+
+
+
+
 
 export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
   const [bgImage, setBgImage] = useState(page.bgImage);
-  const [loading, setLoading] = useState(false);
+  const [avatar, setAvatar] = useState(page.bgImage);
 
+  const [bgloading, setBGLoading] = useState(false);
+  const [avatarLoading, setAvatarLoading] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleBgChange = (e) => {
+    console.log("ankit");
     setBgImage(e.target.files[0]);
   };
-  const handleImageUpload = async () => {
-    const formData = new FormData();
-    formData.append("image", bgImage);
-    
-    setLoading(true);
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-    if (response.ok) {
-      const responseData = await response.json();
-      const imageUrl = responseData.data;
-      console.log("response : ", imageUrl);
-      setBgImage(imageUrl);
-      console.log(bgImage);
-    } else {
-      console.error("Error uploading image: ", response.statusText);
-    }
-    setLoading(false);
+
+  const handleAvatarChange = (e) => {
+    setAvatar(e.target.files[0]);
   };
+
+  const handleAvatarImageChange = async () => {
+    
+    setAvatarLoading(true);
+    await handleImageUpload(avatar, (link) => {
+      setAvatar(link);
+    });
+    setAvatarLoading(false);
+  };
+
+
+
+  const handleBgImageChange = async () => {
+    
+    setBGLoading(true);
+    await handleImageUpload(bgImage, (link) => {
+      setBgImage(link);
+    });
+    setBGLoading(false);
+    console.log("thanks")
+    console.log(bgImage);
+  };
+
+
+
   const saveBaseSettings = async (formData) => {
-    const res = await savePageSettings(formData, bgColor,bgImage);
+    const res = await savePageSettings(formData, bgColor, bgImage);
     if (res) {
       toast.success("Saved!");
     }
@@ -61,14 +85,14 @@ export default function PageSettingsForm({ page, user }) {
       <div className="-m-4 ">
         <form action={saveBaseSettings}>
           <div
-            className=" py-4 min-h-[200px] flex justify-center items-center bg-cover bg-center "
+            className=" py-4 min-h-[400px] flex justify-center items-center bg-cover bg-center  "
             style={
               bgType === "color"
                 ? { backgroundColor: bgColor }
                 : { backgroundImage: `url(${bgImage})` }
             }
           >
-            <div>
+            <div className="flex flex-col justify-center items-center">
               <RadioToggelers
                 options={[
                   { value: "color", icon: faPalette, label: "Color" },
@@ -99,12 +123,27 @@ export default function PageSettingsForm({ page, user }) {
               {bgType === "image" && (
                 <div className="flex justify-center">
                   <label className="bg-white shadow px-4 py-2 mt-2 cursor-pointer">
-                    <input onChange={handleFileChange} hidden type="file" name="file" />
-                    Choose Image
+                    <input
+                      onChange={handleBgChange}
+                      hidden
+                      type="file"
+                      name="file"
+                    />
+                    <div className="flex gap-2 items-center cursor-pointer text-blue-600">
+                      <FontAwesomeIcon
+                        icon={faCloudArrowUp}
+                        className={bgloading ? "text-gray-700" : "text-blue-600"}
+                      />
+                      <span className="text-gray-700">Change BG Image</span>
+                      <button
+                        onClick={handleBgImageChange}
+                        disabled={!bgImage || bgloading}
+                      >
+                        {bgloading ? "Uploading..." : "Upload"}
+                      </button>
+                    </div>
                   </label>
-                  <button onClick={handleImageUpload} disabled={!bgImage || loading}>
-                    {loading ? "Uploading..." : "Upload"}
-                  </button>
+
                   {/* <ImageUpload/> */}
                 </div>
               )}
@@ -112,15 +151,36 @@ export default function PageSettingsForm({ page, user }) {
           </div>
           <div>
             <div className="flex justify-center -mb-8">
-              <Image
-                src={user?.image}
-                alt={"avatar"}
-                width={128}
-                height={128}
-                className="
-              rounded-full
-            relative -top-8 border-4 border-white shadow shadow-black/50 "
-              />
+              <div className="relative -top-8 w-[192px] h-[192px]">
+                <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
+                  <Image
+                    className="w-full h-full object-cover"
+                    src={user?.image}
+                    alt={"avatar"}
+                    width={128}
+                    height={128}
+                  />
+                </div>
+                <label
+                  htmlFor="avatarIn"
+                  className="absolute bottom-4 -right-2 bg-white p-2 rounded-full shadow shadow-black/50 aspect-square flex items-center cursor-pointer"
+                >
+                  <FontAwesomeIcon size={"xl"} icon={faPencilAlt} />
+                  <button
+                    onClick={handleAvatarImageChange}
+                    disabled={!avatar || avatarLoading}
+                  >
+                    {avatarLoading ? "Uploading..." : "Upload"}
+                  </button>
+                </label>
+                <input
+                  id="avatarIn"
+                  onChange={handleAvatarChange}
+                  type="file"
+                  className="hidden"
+                />
+                <input type="hidden" name="avatar" value={avatar} />
+              </div>
             </div>
 
             <div className="flex flex-col w-full p-8">
