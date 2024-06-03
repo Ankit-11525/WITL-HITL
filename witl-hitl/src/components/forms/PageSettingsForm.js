@@ -25,7 +25,7 @@ export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
   const [bgImage, setBgImage] = useState(page.bgImage);
-  const [avatar, setAvatar] = useState(page.bgImage);
+  const [avatar, setAvatar] = useState(user?.image);
 
   const [bgloading, setBGLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
@@ -46,6 +46,8 @@ export default function PageSettingsForm({ page, user }) {
       setAvatar(link);
     });
     setAvatarLoading(false);
+    console.log("avatar : ")
+    console.log(avatar);
   };
 
 
@@ -57,14 +59,13 @@ export default function PageSettingsForm({ page, user }) {
       setBgImage(link);
     });
     setBGLoading(false);
-    console.log("thanks")
-    console.log(bgImage);
+   
   };
 
 
 
   const saveBaseSettings = async (formData) => {
-    const res = await savePageSettings(formData, bgColor, bgImage);
+    const res = await savePageSettings(formData, bgColor, bgImage,avatar);
     if (res) {
       toast.success("Saved!");
     }
@@ -155,7 +156,7 @@ export default function PageSettingsForm({ page, user }) {
                 <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
                   <Image
                     className="w-full h-full object-cover"
-                    src={user?.image}
+                    src={avatar}
                     alt={"avatar"}
                     width={128}
                     height={128}
