@@ -3,21 +3,44 @@ import { useState } from "react";
 import { faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
 import RadioToggelers from "../formItems/RadioToggelers";
 import Image from "next/image";
-
 import SubmitButton from "../buttons/SubmitButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { savePageSettings } from "@/actions/pageActions";
 import toast from "react-hot-toast";
-import { SketchPicker } from "react-color";
 import ColorPicker from "../formItems/ColorPicker";
 
 export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
-  const [bgImage, setBgImage] = useState(page.bgColor);
+  const [bgImage, setBgImage] = useState(page.bgImage);
+  const [loading, setLoading] = useState(false);
 
+
+  const handleFileChange = (e) => {
+    setBgImage(e.target.files[0]);
+  };
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append("image", bgImage);
+    
+    setLoading(true);
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      const imageUrl = responseData.data;
+      console.log("response : ", imageUrl);
+      setBgImage(imageUrl);
+      console.log(bgImage);
+    } else {
+      console.error("Error uploading image: ", response.statusText);
+    }
+    setLoading(false);
+  };
   const saveBaseSettings = async (formData) => {
-    const res = await savePageSettings(formData,bgColor);
+    const res = await savePageSettings(formData, bgColor,bgImage);
     if (res) {
       toast.success("Saved!");
     }
@@ -42,7 +65,7 @@ export default function PageSettingsForm({ page, user }) {
             style={
               bgType === "color"
                 ? { backgroundColor: bgColor }
-                : { backgroundImage: bgImage }
+                : { backgroundImage: `url(${bgImage})` }
             }
           >
             <div>
@@ -59,13 +82,30 @@ export default function PageSettingsForm({ page, user }) {
                 <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
                   <div className="flex gap-2 justify-center">
                     <span>Background color:</span>
-                    <ColorPicker type="color" name={bgColor} bgColor={bgColor} setBgColor={setBgColor}/>
+                    <ColorPicker
+                      type="color"
+                      name={bgColor}
+                      bgColor={bgColor}
+                      setBgColor={setBgColor}
+                    />
                     {/* <input
                       type="color"
                       name="bgColor"
                       onChange={ev => setBgColor(ev.target.value)}
                       defaultValue={page.bgColor} /> */}
                   </div>
+                </div>
+              )}
+              {bgType === "image" && (
+                <div className="flex justify-center">
+                  <label className="bg-white shadow px-4 py-2 mt-2 cursor-pointer">
+                    <input onChange={handleFileChange} hidden type="file" name="file" />
+                    Choose Image
+                  </label>
+                  <button onClick={handleImageUpload} disabled={!bgImage || loading}>
+                    {loading ? "Uploading..." : "Upload"}
+                  </button>
+                  {/* <ImageUpload/> */}
                 </div>
               )}
             </div>

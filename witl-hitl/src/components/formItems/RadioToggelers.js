@@ -3,7 +3,8 @@ export default function RadioToggelers({ options,defaultValue, onChange }) {
   return (
     <div className="radiotoggler shadow">
       {options.map((option) => (
-        <label key={option.value}>
+        <label key={option.value} 
+        className="cursor-pointer">
           <input
             type="radio"
             name="bgType"

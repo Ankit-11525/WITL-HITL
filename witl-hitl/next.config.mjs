@@ -7,7 +7,9 @@ const nextConfig = {
               hostname: '*.googleusercontent.com',
             },
           ],
+          domains: ['res.cloudinary.com'],
       },
+      
 };
 
 export default nextConfig;

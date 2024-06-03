@@ -4,7 +4,7 @@ import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 
-export async function savePageSettings(formData,bgColor) {
+export async function savePageSettings(formData,bgColor,bgImage) {
   mongoose.connect(process.env.MONGO_URI);
   const session = await getServerSession(authOptions);
 
@@ -18,6 +18,8 @@ export async function savePageSettings(formData,bgColor) {
       }
     }
     dataToUpdate["bgColor"] = bgColor;
+    dataToUpdate["bgImage"] = bgImage;
+
 
     await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
 
