@@ -31,7 +31,6 @@ export default function PageSettingsForm({ page, user }) {
   const [avatarLoading, setAvatarLoading] = useState(false);
 
   const handleBgChange = (e) => {
-    console.log("ankit");
     setBgImage(e.target.files[0]);
   };
 
@@ -164,12 +163,13 @@ export default function PageSettingsForm({ page, user }) {
                 </div>
                 <label
                   htmlFor="avatarIn"
-                  className="absolute bottom-4 -right-2 bg-white p-2 rounded-full shadow shadow-black/50 aspect-square flex items-center cursor-pointer"
+                  className="flex-row gap-8 absolute bottom-4 -right-16 bg-white p-2 rounded-full shadow shadow-black/50  flex items-center cursor-pointer"
                 >
-                  <FontAwesomeIcon size={"xl"} icon={faPencilAlt} />
+                  <FontAwesomeIcon size={"xl"} icon={faPencilAlt} className={avatarLoading ? "text-gray-500" : "text-blue-600"} />
                   <button
                     onClick={handleAvatarImageChange}
                     disabled={!avatar || avatarLoading}
+                    className={avatarLoading ? "text-gray-500" : "text-blue-600"}
                   >
                     {avatarLoading ? "Uploading..." : "Upload"}
                   </button>
