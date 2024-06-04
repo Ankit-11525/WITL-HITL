@@ -23,7 +23,7 @@ export default function AppSideBar() {
           icon={faFileInvoice}
           className="h-6 w-6"
         />
-        <span>My Page</span>
+        <span className="text-xl">My Page</span>
       </Link>
       <Link
         href={"/analytics"}
@@ -36,10 +36,10 @@ export default function AppSideBar() {
           icon={faChartLine}
           className="h-6 w-6"
         />
-        <span>Analytics</span>
+        <span className="text-xl">Analytics</span>
       </Link>
       <LogoutButton
-        className="flex gap-4 items-center p-2"
+        className="flex gap-4 items-center p-2 text-xl"
         iconClasses="h-6 w-6"
         iconLeft={true}
       />
@@ -48,7 +48,7 @@ export default function AppSideBar() {
         className="flex items-center gap-2 text-xs text-gray-500 border-t pt-4"
       >
         <FontAwesomeIcon icon={faArrowLeft} className={"w-3 h-3"} />
-        <span>Back to website</span>
+        <span className="text-xl">Back to website</span>
       </Link>
     </nav>
   );

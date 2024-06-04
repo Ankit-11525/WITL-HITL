@@ -1,13 +1,14 @@
-
 import { Lato } from "next/font/google";
 import "../globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AppSideBar from "@/components/layout/AppSideBar";
 import { Toaster } from "react-hot-toast";
-const lato = Lato({ subsets: ["latin"],weight:['400','700'] });
+const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "WITL-HITL",
@@ -22,23 +23,38 @@ export default async function AppLayout({ children }) {
   return (
     <html lang="en">
       <body className={lato.className}>
-        <Toaster/>
-        <main className="flex min-h-screen ">
-          <aside className=" w-48 p-4 pt-6 bg-white shadow">
-            aside stuffs
-            <div className="rounded-full overflow-hidden mx-auto">
-              <Image
-                src={(await session)?.user?.image}
-                alt={"avatar"}
-                width={256}
-                height={256}
-              />
+        <Toaster />
+        <main className="md:flex min-h-screen ">
+          <label
+            htmlFor="navCb"
+            className="md:hidden ml-8 mt-4 p-4 rounded-md bg-white shadow inline-flex items-center gap-2 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={faBars} />
+            <span>Open navigation</span>
+          </label>
+          <input id="navCb" type="checkbox" className="hidden" />
+          <label
+            htmlFor="navCb"
+            className="hidden backdrop fixed inset-0 bg-black/80 z-10"
+          ></label>
+
+          <aside className=" p-8 flex flex-col items-center bg-white shadow fixed md:static -left-48 top-0 bottom-0 z-20 transition-all">
+            <div className="text-xl text-blue-600 ">MENU</div>
+            <div className="sticky top-0 pt-2">
+              <div className="rounded-full overflow-hidden aspect-square w-32 mx-auto">
+                <Image
+                  src={session.user.image}
+                  width={256}
+                  height={256}
+                  alt={"avatar"}
+                />
+              </div>
             </div>
-            <AppSideBar/>
+            <div className="text-center">
+              <AppSideBar />
+            </div>
           </aside>
-          <div className="w-full">
-            <div className="bg-white m-4 p-4 shadow">{children}</div>
-          </div>
+          <div className="grow">{children}</div>
         </main>
       </body>
     </html>

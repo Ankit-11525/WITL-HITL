@@ -16,7 +16,7 @@ import { savePageSettings } from "@/actions/pageActions";
 import toast from "react-hot-toast";
 import ColorPicker from "../formItems/ColorPicker";
 import {handleImageUpload} from '../../libs/uploadImage'
-
+import { SectionBox } from "../layout/SectionBox";
 
 
 
@@ -82,8 +82,10 @@ export default function PageSettingsForm({ page, user }) {
   };
   return (
     <div>
-      <div className="-m-4 ">
-        <form action={saveBaseSettings}>
+      <div >
+
+        <SectionBox>
+          <form action={saveBaseSettings}>
           <div
             className=" py-4 min-h-[400px] flex justify-center items-center bg-cover bg-center  "
             style={
@@ -157,8 +159,8 @@ export default function PageSettingsForm({ page, user }) {
                     className="w-full h-full object-cover"
                     src={avatar}
                     alt={"avatar"}
-                    width={128}
-                    height={128}
+                    width={256}
+                    height={256}
                   />
                 </div>
                 <label
@@ -234,6 +236,8 @@ export default function PageSettingsForm({ page, user }) {
             </SubmitButton>
           </div>
         </form>
+        </SectionBox>
+        
       </div>
     </div>
   );
