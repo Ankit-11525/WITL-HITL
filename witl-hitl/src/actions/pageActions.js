@@ -5,7 +5,7 @@ import { User } from "@/models/User";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 
-export async function savePageSettings(formData, bgColor, bgImage,avatar) {
+export async function savePageSettings(formData, bgColor, bgImage, avatar) {
   mongoose.connect(process.env.MONGO_URI);
   const session = await getServerSession(authOptions);
 
@@ -23,10 +23,42 @@ export async function savePageSettings(formData, bgColor, bgImage,avatar) {
     if (bgImage) dataToUpdate["bgImage"] = bgImage;
 
     await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
-    if(avatar) await User.updateOne({email:session?.user?.email},{image:avatar});
-    console.log("ankit:" ,avatar);
+    if (avatar)
+      await User.updateOne({ email: session?.user?.email }, { image: avatar });
+    console.log("ankit:", avatar);
 
     return true;
   }
   return false;
+}
+
+export async function savePageButtons(formData) {
+  mongoose.connect(process.env.MONGO_URI);
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    const buttonsValues={};
+    formData.forEach((button,key) => {
+      buttonsValues[key]=button
+    });
+    const dataToUpdate = { buttons: buttonsValues };
+    await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
+    return true;
+  }
+  return false;
+}
+
+
+
+export async function savePageLinks(links) {
+  mongoose.connect(process.env.MONGO_URI);
+  const session = await getServerSession(authOptions);
+  if (session) {
+    await Page.updateOne(
+      {owner:session?.user?.email},
+      {links},
+    );
+  } else {
+    return false;
+  }
 }

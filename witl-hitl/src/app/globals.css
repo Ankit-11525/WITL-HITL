@@ -19,5 +19,38 @@ body{
 .radiotoggler input:checked+div{
     @apply  bg-white text-blue-600
 }
-
-
+.sortable-ghost{
+    opacity: 0.2;
+}
+.sortable-item {
+    /* user-select: none;/ */
+    padding: 16px;
+    margin: 0 0 8px 0;
+    min-height: 50px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .sortable-item:hover {
+    background-color: #e2e2e2;
+  }
+  
+  @media (max-width: 600px) {
+    .sortable-item {
+      padding: 12px;
+      font-size: 14px;
+    }
+  }
+  .handle {
+    cursor: grab;
+  }
+  
+  .handle:active {
+    cursor: grabbing;
+  }
+  label.input-label{
+    @apply uppercase text-gray-400 text-xs ml-2 font-semibold;
+}
