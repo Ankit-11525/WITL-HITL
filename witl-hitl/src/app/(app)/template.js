@@ -4,11 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AppSideBar from "@/components/layout/AppSideBar";
 import { Toaster } from "react-hot-toast";
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
+import Link from "next/link";
+import mongoose from "mongoose";
+import { Page } from "@/models/Page";
 
 export const metadata = {
   title: "WITL-HITL",
@@ -20,6 +23,8 @@ export default async function AppLayout({ children }) {
   if (!session) {
     return redirect("/");
   }
+  mongoose.connect(process.env.MONGO_URI);
+  const page = await Page.findOne({ owner: session.user.email });
   return (
     <html lang="en">
       <body className={lato.className}>
@@ -38,8 +43,7 @@ export default async function AppLayout({ children }) {
             className="hidden backdrop fixed inset-0 bg-black/80 z-10"
           ></label>
 
-          <aside className=" p-8 flex flex-col items-center bg-white shadow fixed md:static -left-48 top-0 bottom-0 z-20 transition-all">
-            <div className="text-xl text-blue-600 ">MENU</div>
+          <aside className="bg-white w-48 p-4 pt-6 shadow fixed md:static -left-48 top-0 bottom-0 z-20 transition-all">
             <div className="sticky top-0 pt-2">
               <div className="rounded-full overflow-hidden aspect-square w-32 mx-auto">
                 <Image
@@ -49,9 +53,25 @@ export default async function AppLayout({ children }) {
                   alt={"avatar"}
                 />
               </div>
-            </div>
-            <div className="text-center">
-              <AppSideBar />
+              {page && (
+                <Link
+                  target="_blank"
+                  href={"/" + page.uri}
+                  className="text-center mt-4 flex gap-1 items-center justify-center"
+                >
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={faLink}
+                    className="text-blue-500"
+                  />
+                  <span className="text-xl text-gray-300">/</span>
+                  <span>{page.uri}</span>
+                </Link>
+              )}
+
+              <div className="text-center">
+                <AppSideBar />
+              </div>
             </div>
           </aside>
           <div className="grow">{children}</div>

@@ -1,22 +1,16 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    images: {
-        remotePatterns: [
-            {
-              hostname: '*.googleusercontent.com',
-            },
-          ],
-          domains: ['res.cloudinary.com'],
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        hostname: '*.googleusercontent.com',
       },
-      
-};
-
-export default nextConfig;
-
-const path = require('path');
-
-module.exports = {
+    ],
+    domains: ['res.cloudinary.com'],
+  },
   experimental: {
     appDir: true,
   },
@@ -26,6 +20,7 @@ module.exports = {
   },
 };
 
+export default nextConfig;
 
 // next.config.mjs
 
